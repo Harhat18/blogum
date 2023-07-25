@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
-const postShcema = mongoose.Schema({
+const postSchema = mongoose.Schema({
   title: String,
-  subtile: String,
+  subtitle: String,
   content: String,
   tag: String,
   image: String,
-  createAt: {
+  createdAt: {
     type: Date,
     default: new Date(),
   },
 });
 
-const Post = mongoose.model("Post", postShcema);
+const Post = mongoose.model("Post", postSchema);
 
 export default Post;

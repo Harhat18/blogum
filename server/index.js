@@ -1,47 +1,34 @@
 import express from "express";
-import cors from "cors";
 import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import cors from "cors";
 import dotenv from "dotenv";
-import { MongoClient, ServerApiVersion } from "mongodb";
 import postRoutes from "./routes/posts.js";
 
 const app = express();
 dotenv.config();
-app.use(cors());
+
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors());
 
-app.get("/", (req, res) => res.json("Hello to my App"));
-
-app.get("/posts", postRoutes);
-
-// MongoDB connection
-
-const PORT = process.env.PORT || 4000;
-const USERNAME = process.env.USERNAME;
-const PASSWORD = process.env.PASSWORD;
-
-const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.6lgeyf2.mongodb.net/blog?retryWrites=true&w=majority`;
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
+app.get("/", (req, res) => {
+  res.send("hello ");
 });
+app.use("/posts", postRoutes);
 
-async function run() {
-  try {
-    await client.connect();
-    await client.db("blog").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    await client.close();
-  }
-}
-run().catch(console.dir);
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server is running on ${PORT}`));
+mongoose
+  .connect(process.env.CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port: ${PORT} `));
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
+
+mongoose.set("useFindAndModify", false);
