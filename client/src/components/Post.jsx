@@ -51,7 +51,7 @@ const Post = ({ _id, title, subtitle, content, tag, image, createdAt }) => {
         title="Paella dish"
       />
       <div className={classes.overlay}>
-        <Typography variant="h6">Didem</Typography>
+        <Typography variant="h6">Harun</Typography>
         <Typography variant="body2">
           {convertRelativeTime(createdAt)}
         </Typography>
